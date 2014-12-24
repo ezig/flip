@@ -13,7 +13,7 @@ TileGame.Preload.prototype = {
 
 		// load assets
 		this.load.image('tile', 'assets/images/tile.png');
-	
+		this.load.spritesheet('button', 'assets/images/button.png', 190, 49);
 		
 	},
 	

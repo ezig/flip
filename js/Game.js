@@ -1,21 +1,30 @@
 TileGame.Game = function(){};
 
 
-var field = new Array([]);
-var tiles = [[],[],[],[]];
+var field = [];
+var tiles = [];
+var size;
 
 TileGame.Game.prototype = {
 
+    init: function (level) {
+        size = level + 3;
+    },
+
     create: function () {
         //  Honestly, just about anything could go here. It's YOUR game after all. Eat your heart out!
+        for (var i = 0; i < size; i++)
+        {
+            tiles[i] = [];
+            field[i] = [];
+            for (var j = 0; j < size; j++)
+            {
+                field[i][j] = 0;
+            }
+        }
 
-        field = [[0, 0, 0, 0],
-                 [0, 0, 0, 0],
-                 [0, 0, 0, 0],
-                 [0, 0, 0, 0]];
-
-        for (var i = 0; i < 5; i++) {
-            this.pickTile(Math.floor((Math.random() * 3)), Math.floor((Math.random() * 3)));
+        for (var i = 0; i < size; i++) {
+            this.pickTile(Math.floor((Math.random() * (size - 1))), Math.floor((Math.random() * (size - 1))));
         };
 
         this.drawField();
@@ -38,10 +47,10 @@ TileGame.Game.prototype = {
     },
 
     drawField: function () {
-        for (var i = 0; i < 4; i++) {
-            for (var j = 0; j < 4; j++) {
-                var tile = this.game.add.sprite(this.game.world.centerX - 200 + i * 100,
-                 this.game.world.centerY - 200 + j * 100,'tile');
+        for (var i = 0; i < size; i++) {
+            for (var j = 0; j < size; j++) {
+                var tile = this.game.add.sprite(this.game.world.centerX - (size/2.0 * 100) + i * 100,
+                 this.game.world.centerY - (size/2.0) * 100 + j * 100,'tile');
 
                 if (field[j][i] == 1)
                 {
@@ -76,7 +85,7 @@ TileGame.Game.prototype = {
     },
 
     flipTile: function (row, col) {
-        if (row < 4 && row >= 0 && col < 4 && col >= 0)
+        if (row < size && row >= 0 && col < size && col >= 0)
         {
             field[row][col] = (field[row][col] + 1) % 2;
         }
@@ -84,8 +93,8 @@ TileGame.Game.prototype = {
 
     checkWin: function () {
         var sum = 0;
-        for (var i = 0; i < 4; i++) {
-            for (var j = 0; j < 4; j++) {
+        for (var i = 0; i < size; i++) {
+            for (var j = 0; j < size; j++) {
                 sum += field[i][j];
             }
         }
