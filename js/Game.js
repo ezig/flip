@@ -172,7 +172,7 @@ TileGame.Game.prototype = {
         emitter.maxParticleSpeed.setTo(200, 200);
         emitter.gravity = 100;
         emitter.start(true, 1500, null, 300);
-        this.wonSound.onStop.add(this.quitGame, this);
+        this.game.time.events.add(1500, this.quitGame, this);
         this.wonSound.play();
     },
 };
