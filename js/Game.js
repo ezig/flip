@@ -1,5 +1,6 @@
 TileGame.Game = function(){};
 
+var levelType
 var level;
 var levelNum;
 var field = [];
@@ -7,22 +8,45 @@ var size;
 
 TileGame.Game.prototype = {
 
-    init: function (lev) {
-        levelNum = lev;
-        level = data[lev].level;
-        size = data[lev].size;
+    init: function () {
+        levelNum = this.levelNum;
+        levelType = this.levelType;
+
     },
 
     create: function () {
         this.flipSound = this.game.add.audio('flip');
         this.wonSound = this.game.add.audio('won');
 
-        for (var i = 0; i < size; i++)
+        if (levelType == "Adventure")
         {
-            field[i] = [];
+            level = data[levelNum].level;
+            size = data[levelNum].size;
+        } else {
+            var sizes = [];
+            sizes["Easy"] = 3;
+            sizes["Medium"] = 4;
+            sizes["Hard"] = 5;
+            sizes["Killer"] = 6;
+
+            size = sizes[levelType];
         }
 
-        this.drawField();
+        for (var i = 0; i < size; i++) {
+            field[i] = [];
+
+            for (var j = 0; j < size; j++)
+            {
+                field[i][j] = [0];
+            }
+        }
+
+        if (levelType == 'Adventure') {
+            this.drawField();
+        }
+        else {
+            this.generateLevel();
+        }
     },
 
     update: function () {
@@ -37,7 +61,30 @@ TileGame.Game.prototype = {
         //  Stop music, delete sprites, purge caches, free resources, all that good stuff.
 
         //  Then let's go back to the main menu.
-        this.state.start('Game', true, false, levelNum + 1);
+        if (levelType == 'Adventure') {
+            if (levelNum < data.length - 1) {
+                this.state.states['Game'].levelNum++;
+                this.state.start('Game', true, false);
+            } else {
+                this.state.start('MainMenu');
+            }
+        }
+        else {
+            this.state.start('MainMenu');
+        }
+
+    },
+
+    generateLevel: function () {
+        level = field;
+        this.drawField();
+
+        while (this.checkWin())
+        {
+            for (var i = 0; i < size; i++) {
+                this.pickTile(Math.floor((Math.random() * (size - 1))), Math.floor((Math.random() * (size - 1))));
+            }
+        }
 
     },
 
@@ -72,25 +119,15 @@ TileGame.Game.prototype = {
     onDown: function (tile, pointer) {
         this.flipSound.play();
 
-        this.pickTile(tile);
+        this.pickTile(tile.row, tile.col);
 
         if (this.checkWin())
         {
-            var emitter = this.game.add.emitter(this.game.world.centerX, this.game.world.centerY - 50, 100);
-            emitter.makeParticles('particle');
-            emitter.minParticleSpeed.setTo(-200, -200);
-            emitter.maxParticleSpeed.setTo(200, 200);
-            emitter.gravity = 100;
-            emitter.start(true, 1500, null, 300);
-            this.wonSound.onStop.add(this.quitGame, this);
-            this.wonSound.play();
+            this.win();
         }
     },
 
-    pickTile: function (tile) {
-        var row = tile.row;
-        var col = tile.col;
-
+    pickTile: function (row, col) {
         this.flipTile(row, col);
         this.flipTile(row - 1, col);
         this.flipTile(row + 1, col);
@@ -126,5 +163,16 @@ TileGame.Game.prototype = {
         }
 
         return (sum == 0);
-    }
+    },
+
+    win: function () {
+        var emitter = this.game.add.emitter(this.game.world.centerX, this.game.world.centerY - 50, 100);
+        emitter.makeParticles('particle');
+        emitter.minParticleSpeed.setTo(-200, -200);
+        emitter.maxParticleSpeed.setTo(200, 200);
+        emitter.gravity = 100;
+        emitter.start(true, 1500, null, 300);
+        this.wonSound.onStop.add(this.quitGame, this);
+        this.wonSound.play();
+    },
 };

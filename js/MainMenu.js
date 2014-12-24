@@ -19,7 +19,7 @@ TileGame.MainMenu.prototype = {
 			button.events.onInputOver.add(this.onOver, this);
 			button.events.onInputOut.add(this.onOut, this);
 			
-			button.level = i;
+			button.levelType = texts[i];
 
 			var t = this.game.add.text(this.game.world.centerX, this.game.world.centerY + 80 * i, texts[i], style);
 			t.anchor.set(0.5, 0.5);
@@ -28,12 +28,9 @@ TileGame.MainMenu.prototype = {
 
 	onClick: function(button) {
 		button.tint = 0xFF0000;
-		if (button.level == 3) { 
-			this.game.state.start('Game', true, false, 0);
-		} 
-		else {
-			this.game.state.start('ClassicGame', true, false, button.level);
-		}
+		this.game.state.states['Game'].levelType = button.levelType;
+		this.game.state.states['Game'].levelNum = 0;
+		this.game.state.start('Game', true, false);
 	},
 
 	onOver: function(button) {
