@@ -8,7 +8,7 @@ TileGame.MainMenu.prototype = {
 		this.game.stage.backgroundColor = '#1CABD7';
 
 		var text = "Flip";
-		var style = { font: "30px Arial", fill: "fff", align: "center"};
+		var style = { font: "30px Arial", fill: "0xFFFFFF", align: "center"};
 		var t = this.game.add.text(this.game.world.centerX, this.game.world.centerY - 80, text, style);
 		t.anchor.set(0.5, 0.5);
 
