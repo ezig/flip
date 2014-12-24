@@ -9,7 +9,10 @@ TileGame.Preload.prototype = {
 
 		// load assets
 		this.load.image('tile', 'assets/images/tile.png');
-		this.load.spritesheet('button', 'assets/images/button.png', 190, 49);
+		this.load.image('particle', 'assets/images/particle.png');
+		this.load.image('button', 'assets/images/button.png');
+		this.load.audio('flip', 'assets/audio/flip.ogg');
+		this.load.audio('won', 'assets/audio/won.ogg');
 		
 	},
 	

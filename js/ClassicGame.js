@@ -11,6 +11,9 @@ TileGame.ClassicGame.prototype = {
     },
 
     create: function () {
+        this.flipSound = this.game.add.audio('flip');
+        this.wonSound = this.game.add.audio('won');
+
         for (var i = 0; i < size; i++)
         {
             field[i] = [];
@@ -60,11 +63,14 @@ TileGame.ClassicGame.prototype = {
     },
 
     onDown: function (tile, pointer) {
+        this.flipSound.play();
+
         this.pickTile(tile.row, tile.col);
 
         if (this.checkWin())
         {
-            this.quitGame();
+            this.wonSound.onStop.add(this.quitGame, this);
+            this.wonSound.play();
         }
     },
 

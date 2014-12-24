@@ -14,7 +14,8 @@ TileGame.Game.prototype = {
     },
 
     create: function () {
-
+        this.flipSound = this.game.add.audio('flip');
+        this.wonSound = this.game.add.audio('won');
 
         for (var i = 0; i < size; i++)
         {
@@ -69,11 +70,20 @@ TileGame.Game.prototype = {
     },
 
     onDown: function (tile, pointer) {
+        this.flipSound.play();
+
         this.pickTile(tile);
 
         if (this.checkWin())
         {
-            this.quitGame();
+            var emitter = this.game.add.emitter(this.game.world.centerX, this.game.world.centerY - 50, 100);
+            emitter.makeParticles('particle');
+            emitter.minParticleSpeed.setTo(-200, -200);
+            emitter.maxParticleSpeed.setTo(200, 200);
+            emitter.gravity = 100;
+            emitter.start(true, 1500, null, 300);
+            this.wonSound.onStop.add(this.quitGame, this);
+            this.wonSound.play();
         }
     },
 
@@ -115,6 +125,6 @@ TileGame.Game.prototype = {
             }
         }
 
-        return sum == 0;
+        return (sum == 0);
     }
 };
