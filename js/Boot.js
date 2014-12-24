@@ -10,10 +10,11 @@ TileGame.Boot.prototype = {
 
 	preload: function() {
 		// preloader assets
-		this.load.image('progressBar', 'assets/images/progress_bar_bg.png');
-        this.load.image('progressBarDark', 'assets/images/progress_bar_fg.png');
+		//this.load.image('progressBar', 'assets/images/progress_bar_fg.png');
 	},
 	create: function() {
+        this.game.stage.backgroundColor = '#1CABD7';
+
         // disable multi touch
         this.input.maxPointers = 1;
 

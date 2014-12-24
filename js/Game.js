@@ -1,31 +1,25 @@
 TileGame.Game = function(){};
 
-
+var level;
+var levelNum;
 var field = [];
-var tiles = [];
 var size;
 
 TileGame.Game.prototype = {
 
-    init: function (level) {
-        size = level + 3;
+    init: function (lev) {
+        levelNum = lev;
+        level = data[lev].level;
+        size = data[lev].size;
     },
 
     create: function () {
-        //  Honestly, just about anything could go here. It's YOUR game after all. Eat your heart out!
+
+
         for (var i = 0; i < size; i++)
         {
-            tiles[i] = [];
             field[i] = [];
-            for (var j = 0; j < size; j++)
-            {
-                field[i][j] = 0;
-            }
         }
-
-        for (var i = 0; i < size; i++) {
-            this.pickTile(Math.floor((Math.random() * (size - 1))), Math.floor((Math.random() * (size - 1))));
-        };
 
         this.drawField();
     },
@@ -42,41 +36,51 @@ TileGame.Game.prototype = {
         //  Stop music, delete sprites, purge caches, free resources, all that good stuff.
 
         //  Then let's go back to the main menu.
-        this.state.start('MainMenu');
+        this.state.start('Game', true, false, levelNum + 1);
 
     },
 
     drawField: function () {
         for (var i = 0; i < size; i++) {
             for (var j = 0; j < size; j++) {
-                var tile = this.game.add.sprite(this.game.world.centerX - (size/2.0 * 100) + i * 100,
-                 this.game.world.centerY - (size/2.0) * 100 + j * 100,'tile');
+                if (level[j][i] !== "") {
+                    var tile = this.game.add.sprite(this.game.world.centerX - (size/2.0 * 100) + i * 100,
+                     this.game.world.centerY - (size/2.0) * 100 + j * 100,'tile');
 
-                if (field[j][i] == 1)
-                {
-                    tile.tint = 0xFF0000
+                    tile.val = level[j][i];
+                    this.changeTint(tile);
+
+                    tile.row = j;
+                    tile.col = i;
+                    tile.isTile = true;
+                    tile.inputEnabled = true;
+                    tile.events.onInputDown.add(this.onDown, this);
+                    field[j][i] = tile;
+                } else {
+                    var tile = {
+                        val: 0,
+                        isTile: false 
+                    };
+
+                    field[j][i] = tile;
                 }
-                tile.row = j;
-                tile.col = i;
-                tile.inputEnabled = true;
-                tile.events.onInputDown.add(this.onDown, this);
-                tiles[j][i] = tile;
             }
         }
     },
 
     onDown: function (tile, pointer) {
-        this.pickTile(tile.row, tile.col);
+        this.pickTile(tile);
 
         if (this.checkWin())
         {
             this.quitGame();
         }
-
-        this.drawField();
     },
 
-    pickTile: function (row, col) {
+    pickTile: function (tile) {
+        var row = tile.row;
+        var col = tile.col;
+
         this.flipTile(row, col);
         this.flipTile(row - 1, col);
         this.flipTile(row + 1, col);
@@ -85,9 +89,21 @@ TileGame.Game.prototype = {
     },
 
     flipTile: function (row, col) {
-        if (row < size && row >= 0 && col < size && col >= 0)
-        {
-            field[row][col] = (field[row][col] + 1) % 2;
+        if (row < size && row >= 0 && col < size && col >= 0) {
+            if (field[row][col].isTile) {
+                field[row][col].val = (field[row][col].val + 1) % 2;
+
+                this.changeTint(field[row][col]);
+            }
+        }
+    },
+
+    changeTint: function (tile) {
+        if (tile.val == 0) {
+            tile.tint = "0xFFFFFF";
+        } 
+        else {
+            tile.tint = "0xFF0000";
         }
     },
 
@@ -95,7 +111,7 @@ TileGame.Game.prototype = {
         var sum = 0;
         for (var i = 0; i < size; i++) {
             for (var j = 0; j < size; j++) {
-                sum += field[i][j];
+                sum += field[i][j].val;
             }
         }
 
