@@ -2,10 +2,10 @@ TileGame.Preload = function(){};
 
 TileGame.Preload.prototype = {
 	preload: function() {
-		// this.preloadBar = this.add.sprite(this.game.world.centerX, this.game.world.centerY + 40,
-		// 	'progressBar');
-		// this.preloadBar.anchor.setTo(0.5, 0.5);
-		// this.load.setPreloadSprite(this.preloadBar);
+		this.preloadBar = this.add.sprite(this.game.world.centerX, this.game.world.centerY + 40,
+			'progressBar');
+		this.preloadBar.anchor.setTo(0.5, 0.5);
+		this.load.setPreloadSprite(this.preloadBar);
 
 		// load assets
 		this.load.image('tile', 'assets/images/tile.png');

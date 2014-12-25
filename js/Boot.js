@@ -10,7 +10,7 @@ TileGame.Boot.prototype = {
 
 	preload: function() {
 		// preloader assets
-		//this.load.image('progressBar', 'assets/images/progress_bar_fg.png');
+		this.load.image('progressBar', 'assets/images/progressBar.png');
 	},
 	create: function() {
         this.game.stage.backgroundColor = '#1CABD7';
@@ -29,7 +29,7 @@ TileGame.Boot.prototype = {
         else
         {
             this.scale.pageAlignHorizontally = true;
-            this.game.scale.scaleMode = Phaser.ScaleManager.EXACT_FIT;
+            this.game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
             this.game.scale.setScreenSize();
             this.game.scale.refresh();
             //  Same goes for mobile settings.
