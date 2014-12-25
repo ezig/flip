@@ -5,31 +5,39 @@ TileGame.MainMenu.prototype = {
 		// this.background = this.game.add.tileSprite(0, 0, this.game.width, this.game.height,
 		// 	'space');
 		// this.background.autoScroll(-15,20);
-		this.game.stage.backgroundColor = '#1CABD7';
-
 		var text = "Flip";
 		var style = { font: "30px Arial", fill: "0xFFFFFF", align: "center"};
-		var t = this.game.add.text(this.game.world.centerX, this.game.world.centerY - 80, text, style);
+		var quarterY = this.game.height/4.0;
+		var t = this.game.add.text(this.game.world.centerX, quarterY, text, style);
 		t.anchor.set(0.5, 0.5);
 
-		var texts = ["Easy", "Medium", "Hard"];
+		var texts = ["Easy", "Medium", "Hard", "Adventure"];
 		var style = { font: "20px Arial", fill: "000", align: "center"};
-		for (var i = 0; i < 3; i++)
+		for (var i = 0; i < 4; i++)
 		{
-			var button = this.game.add.button(this.game.world.centerX, this.game.world.centerY + 80 * i, 'button', this.onClick, this);
+			var button = this.game.add.button(this.game.world.centerX, quarterY + 80 * (i + 1), 'button', this.onClick, this);
 			button.anchor.set(0.5, 0.5);
 			button.events.onInputOver.add(this.onOver, this);
 			button.events.onInputOut.add(this.onOut, this);
-			button.level = i;
+			
+			button.levelType = texts[i];
 
-			var t = this.game.add.text(this.game.world.centerX, this.game.world.centerY + 80 * i, texts[i], style);
+			var t = this.game.add.text(this.game.world.centerX, quarterY + 80 * (i + 1), texts[i], style);
 			t.anchor.set(0.5, 0.5);
 		}
 	},
 
 	onClick: function(button) {
 		button.tint = 0xFF0000;
-		this.game.state.start('Game', true, false, button.level);
+		this.game.state.states['Game'].levelType = button.levelType;
+
+		if (button.levelType == 'Adventure')
+		{
+			this.game.state.start('LevelSelect');
+		} else {
+			this.game.state.start('Game');
+		}
+		// this.game.state.states['Game'].levelNum = 20;
 	},
 
 	onOver: function(button) {
