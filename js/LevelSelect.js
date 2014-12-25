@@ -1,37 +1,49 @@
 TileGame.LevelSelect = function(){};
 
+// total number of pages
 var pages;
-// group where to place all level thumbnails
+
+// keeps track of sprites that need to move
 var levelThumbsGroup;
-// current page
+
 var currentPage;
-// arrows to navigate through level pages
+
+// nav buttons
 var leftArrow;
 var rightArrow;
  
 TileGame.LevelSelect.prototype = {
   	create: function(){
+  		var menu = this.game.add.button(this.game.world.centerX - (this.game.global.thumbCols / 2.0) * (this.game.global.thumbWidth + this.game.global.thumbSpacing),
+			this.game.world.centerY - ((this.game.global.thumbRows + 1) / 2.0) * (this.game.global.thumbHeight + this.game.global.thumbSpacing), 'menu', this.mainMenu, this);
+
   		// how many pages are needed to show all levels
-  		pages = this.game.global.lockedArray.length/(this.game.global.thumbRows*this.game.global.thumbCols);
-  		
-  		// current page according to last played level, if any
-		currentPage = Math.floor(this.game.global.level/(this.game.global.thumbRows*this.game.global.thumbCols));
-		if(currentPage>pages-1){
-			currentPage = pages-1;
+  		var levelsPerPage = this.game.global.thumbRows * this.game.global.thumbCols;
+  		pages = this.game.global.numLevels / levelsPerPage;
+
+  		// current page according to last played level
+		currentPage = Math.floor(this.game.state.states['Game'].levelNum / levelsPerPage);
+		
+		// if you just played the last level, don't go to a nonexistant page
+		if(currentPage > pages - 1){
+			currentPage = pages - 1;
 		}
-		// left arrow button, to turn one page left
-		leftArrow = this.game.add.button(50,420,"leftArrow",this.leftArrowClicked,this);
-		leftArrow.anchor.setTo(0.5);
-		// can we turn one page left?
-		if(currentPage==0){
+		// left page arrow
+		leftArrow = this.game.add.button(this.game.world.centerX - (this.game.global.thumbCols / 2.0) * (this.game.global.thumbWidth + this.game.global.thumbSpacing),
+			this.game.world.centerY + (this.game.global.thumbRows / 2.0) * (this.game.global.thumbHeight + this.game.global.thumbSpacing),"leftArrow",this.leftArrowClicked,this);
+
+		// grey out the left arrow if on the first page
+		if(currentPage == 0) {
 			leftArrow.alpha = 0.3;
 		}
-		// right arrow button, to turn one page right
-		rightArrow = this.game.add.button(270,420,"rightArrow",this.rightArrowClicked,this);
-		rightArrow.anchor.setTo(0.5);
-		rightArrow.frame = 1;
-		// can we turn one page right?
-		if(currentPage==pages-1){
+
+		// arrow button, to turn one page right
+		rightArrow = this.game.add.button(this.game.world.centerX + (this.game.global.thumbCols / 2.0) * (this.game.global.thumbWidth + this.game.global.thumbSpacing),
+			this.game.world.centerY + (this.game.global.thumbRows / 2.0) * (this.game.global.thumbHeight + this.game.global.thumbSpacing),"rightArrow",this.rightArrowClicked,this);
+		rightArrow.anchor.setTo(1, 0);
+
+		// grey out right arrow if on the last page
+		if(currentPage == pages - 1) {
 			rightArrow.alpha = 0.3;
 		}
 		// creation of the thumbails group
@@ -47,7 +59,7 @@ TileGame.LevelSelect.prototype = {
 			// I am not interested in having level thumbnails vertically centered in the page, but
 			// if you are, simple replace my "20" with
 			// (game.height-levelHeight)/2
-			var offsetY = 20;
+			var offsetY = (this.game.height - levelHeight)/2;
 			// looping through each level thumbnails
 		     for(var i = 0; i < this.game.global.thumbRows; i ++){
 		     	for(var j = 0; j < this.game.global.thumbCols; j ++){  
@@ -56,14 +68,14 @@ TileGame.LevelSelect.prototype = {
 					// adding the thumbnail, as a button which will call thumbClicked function if clicked   		
 					var levelThumb = this.game.add.button(offsetX+j*(this.game.global.thumbWidth+this.game.global.thumbSpacing), offsetY+i*(this.game.global.thumbHeight+this.game.global.thumbSpacing), "levels", this.thumbClicked, this);	
 					// shwoing proper frame
-					if (this.game.global.lockedArray[levelNumber] == 1)
-					{
+					if (this.game.global.lockedArray[levelNumber] == 0) {
 						levelThumb.tint = "0x999999";
-						// var lock = this.game.add.sprite(levelThumb.x + 49, levelThumb.y + 49, 'locked');
-						// lock.anchor.setTo(0.5, 0.5);
-						// //levelThumbsGroup.add(lock);
 						levelThumb.isLocked = true;
-					} else {
+					}
+					else {
+						if (this.game.global.lockedArray[levelNumber] == 2) {
+							levelThumb.tint = "0xFFC125";
+						}
 						levelThumb.isLocked = false;
 					}
 					levelThumb.clicked = false;
@@ -101,7 +113,7 @@ TileGame.LevelSelect.prototype = {
 			var buttonsTween = this.game.add.tween(levelThumbsGroup);
 			buttonsTween.to({
 				x: currentPage * this.game.width * -1
-			}, 400, Phaser.Easing.Cubic.None);
+			}, 1000, Phaser.Easing.Cubic.Out);
 			buttonsTween.start();
 		}		
 	},
@@ -119,24 +131,25 @@ TileGame.LevelSelect.prototype = {
 			var buttonsTween = this.game.add.tween(levelThumbsGroup);
 			buttonsTween.to({
 				x: currentPage * this.game.width * -1
-			}, 500, Phaser.Easing.Cubic.None);
+			}, 1000, Phaser.Easing.Cubic.out);
 			buttonsTween.start();
 		}
 	},
 
 	thumbClicked:function (button){
-		// the level is playable, then play the level!!
+		// the level is playable
 		if(!button.isLocked){
 			this.game.state.states['Game'].levelNum = button.levelNumber;
 			this.game.global.level = button.levelNumber;
 			this.game.state.start('Game');
 		}
-		// else, let's shake the locked levels
+		// otherwise shake the icon to show it is locked
 		else {
 			if (!button.clicked)
 			{
 				button.clicked = true;
 
+				// shakes back and forth once
 				var buttonTween = this.game.add.tween(button)
 				buttonTween.to({
 					x: button.x + 10
@@ -156,4 +169,8 @@ TileGame.LevelSelect.prototype = {
 	tweenDone: function (target, buttonTween) {
 		target.clicked = false;
 	},
+
+    mainMenu: function () {
+        this.state.start('MainMenu');
+    },
 } 

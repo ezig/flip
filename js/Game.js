@@ -14,8 +14,8 @@ TileGame.Game.prototype = {
 
         if (levelType == "Adventure")
         {
-            level = data[levelNum].level;
-            size = data[levelNum].size;
+            level = data[levelNum - 1].level;
+            size = data[levelNum - 1].size;
         } else {
             var sizes = [];
             sizes["Easy"] = 3;
@@ -66,21 +66,37 @@ TileGame.Game.prototype = {
     },
 
     mainMenu: function () {
-        this.state.start('MainMenu');
+        if (levelType == 'Adventure') {
+            // prevent scrolling over to the next page
+            // if you quit the last level on a pageinstead of beating it
+            this.state.states['Game'].levelNum--;
+
+            this.state.start('LevelSelect');
+        } 
+        else  {
+            this.state.start('MainMenu');
+        }
     },
 
     newLevel: function() {
         this.generateLevel();
     },
 
-    quitGame: function (pointer) {
+    win: function (pointer) {
 
         //  Here you should destroy anything you no longer need.
         //  Stop music, delete sprites, purge caches, free resources, all that good stuff.
 
         //  Then let's go back to the main menu.
         if (levelType == 'Adventure') {
-            this.game.global.lockedArray[levelNum] = 0;
+            this.game.global.lockedArray[levelNum - 1] = 2
+            if (this.game.global.lockedArray[levelNum] == 0)
+            {
+                this.game.global.lockedArray[levelNum] = 1;
+            }
+
+            localStorage["levels"] = JSON.stringify(this.game.global.lockedArray);
+
             this.state.start('LevelSelect');
             // if (levelNum < data.length - 1) {
             //     this.state.states['Game'].levelNum++;
@@ -155,7 +171,7 @@ TileGame.Game.prototype = {
 
         if (this.checkWin())
         {
-            this.win();
+            this.winEffects();
         }
     },
 
@@ -197,14 +213,14 @@ TileGame.Game.prototype = {
         return (sum == 0);
     },
 
-    win: function () {
-        var emitter = this.game.add.emitter(this.game.world.centerX, this.game.world.centerY - 50, 100);
+    winEffects: function () {
+        var emitter = this.game.add.emitter(this.game.world.centerX, this.game.world.centerY - 50, 80);
         emitter.makeParticles('particle');
         emitter.minParticleSpeed.setTo(-200, -200);
         emitter.maxParticleSpeed.setTo(200, 200);
         emitter.gravity = 100;
         emitter.start(true, 1500, null, 300);
-        this.game.time.events.add(1500, this.quitGame, this);
+        this.game.time.events.add(1500, this.win, this);
         this.wonSound.play();
     },
 };
