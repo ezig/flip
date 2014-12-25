@@ -30,8 +30,14 @@ TileGame.MainMenu.prototype = {
 	onClick: function(button) {
 		button.tint = 0xFF0000;
 		this.game.state.states['Game'].levelType = button.levelType;
-		this.game.state.states['Game'].levelNum = 0;
-		this.game.state.start('Game', true, false);
+
+		if (button.levelType == 'Adventure')
+		{
+			this.game.state.start('LevelSelect');
+		} else {
+			this.game.state.start('Game');
+		}
+		// this.game.state.states['Game'].levelNum = 20;
 	},
 
 	onOver: function(button) {

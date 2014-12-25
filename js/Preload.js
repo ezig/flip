@@ -2,7 +2,7 @@ TileGame.Preload = function(){};
 
 TileGame.Preload.prototype = {
 	preload: function() {
-		this.preloadBar = this.add.sprite(this.game.world.centerX, this.game.world.centerY + 40,
+		this.preloadBar = this.add.sprite(this.game.world.centerX, this.game.world.centerY,
 			'progressBar');
 		this.preloadBar.anchor.setTo(0.5, 0.5);
 		this.load.setPreloadSprite(this.preloadBar);
@@ -15,6 +15,10 @@ TileGame.Preload.prototype = {
 		this.load.image('musicOff', 'assets/images/musicOff.png');
 		this.load.image('musicOn', 'assets/images/musicOn.png');
 		this.load.image('restart', 'assets/images/restart.png');
+		this.load.image('rightArrow', 'assets/images/arrowRight.png');
+		this.load.image('leftArrow', 'assets/images/arrowLeft.png');
+		this.load.image('locked', 'assets/images/locked.png');
+		this.load.image('levels', 'assets/images/levels.png');
 		this.load.image('new', 'assets/images/new.png');
 		this.load.audio('flip', 'assets/audio/flip.ogg');
 		this.load.audio('won', 'assets/audio/won.ogg');

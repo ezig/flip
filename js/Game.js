@@ -80,12 +80,14 @@ TileGame.Game.prototype = {
 
         //  Then let's go back to the main menu.
         if (levelType == 'Adventure') {
-            if (levelNum < data.length - 1) {
-                this.state.states['Game'].levelNum++;
-                this.state.start('Game', true, false);
-            } else {
-                this.state.start('MainMenu');
-            }
+            this.game.global.lockedArray[levelNum] = 0;
+            this.state.start('LevelSelect');
+            // if (levelNum < data.length - 1) {
+            //     this.state.states['Game'].levelNum++;
+            //     this.state.start('Game', true, false);
+            // } else {
+            //     this.state.start('MainMenu');
+            // }
         }
         else {
             this.state.start('MainMenu');
