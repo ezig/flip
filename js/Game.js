@@ -1,7 +1,7 @@
 TileGame.Game = function(){};
 
 var levelType
-var level;
+var level = [];
 var levelNum;
 var field = [];
 var size;
@@ -11,12 +11,6 @@ TileGame.Game.prototype = {
     init: function () {
         levelNum = this.levelNum;
         levelType = this.levelType;
-
-    },
-
-    create: function () {
-        this.flipSound = this.game.add.audio('flip');
-        this.wonSound = this.game.add.audio('won');
 
         if (levelType == "Adventure")
         {
@@ -31,14 +25,26 @@ TileGame.Game.prototype = {
 
             size = sizes[levelType];
         }
+    },
+
+    create: function () {
+        this.flipSound = this.game.add.audio('flip');
+        this.wonSound = this.game.add.audio('won');
+
+        var menu = this.game.add.button(this.game.world.centerX - (size/2.0 * 100),
+            this.game.world.centerY - (size/2.0 * 100) - 60, 'menu', this.mainMenu, this);
+
+        if (levelType != "Adventure")
+        {
+            var restart = this.game.add.button(this.game.world.centerX - (size/2.0 * 100) + (size - 1) * 100,
+                this.game.world.centerY - (size/2.0 * 100) - 60, 'new', this.newLevel, this);
+        }
+
+        var restart = this.game.add.button(this.game.world.centerX - (size/2.0 * 100) + size * 100 - 50,
+            this.game.world.centerY - (size/2.0 * 100) - 60, 'restart', this.restart, this);
 
         for (var i = 0; i < size; i++) {
             field[i] = [];
-
-            for (var j = 0; j < size; j++)
-            {
-                field[i][j] = [0];
-            }
         }
 
         if (levelType == 'Adventure') {
@@ -53,6 +59,18 @@ TileGame.Game.prototype = {
 
         //  Honestly, just about anything could go here. It's YOUR game after all. Eat your heart out!
 
+    },
+
+    restart: function () {
+        this.drawField();
+    },
+
+    mainMenu: function () {
+        this.state.start('MainMenu');
+    },
+
+    newLevel: function() {
+        this.generateLevel();
     },
 
     quitGame: function (pointer) {
@@ -76,13 +94,25 @@ TileGame.Game.prototype = {
     },
 
     generateLevel: function () {
-        level = field;
+        for (var i = 0; i < size; i++) {
+            level[i] = [];
+
+            for (var j = 0; j < size; j++) {
+                level[i][j] = [0];
+            }
+        }
         this.drawField();
 
         while (this.checkWin())
         {
             for (var i = 0; i < size; i++) {
                 this.pickTile(Math.floor((Math.random() * (size - 1))), Math.floor((Math.random() * (size - 1))));
+            }
+        }
+
+        for (var i = 0; i < size; i++) {
+            for (var j = 0; j < size; j++) {
+                level[i][j] = field[i][j].val;
             }
         }
 

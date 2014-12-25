@@ -11,6 +11,11 @@ TileGame.Preload.prototype = {
 		this.load.image('tile', 'assets/images/tile.png');
 		this.load.image('particle', 'assets/images/particle.png');
 		this.load.image('button', 'assets/images/button.png');
+		this.load.image('menu', 'assets/images/menu.png');
+		this.load.image('musicOff', 'assets/images/musicOff.png');
+		this.load.image('musicOn', 'assets/images/musicOn.png');
+		this.load.image('restart', 'assets/images/restart.png');
+		this.load.image('new', 'assets/images/new.png');
 		this.load.audio('flip', 'assets/audio/flip.ogg');
 		this.load.audio('won', 'assets/audio/won.ogg');
 		
