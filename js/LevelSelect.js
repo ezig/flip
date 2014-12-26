@@ -17,6 +17,11 @@ TileGame.LevelSelect.prototype = {
   		var menu = this.game.add.button(this.game.world.centerX - (this.game.global.thumbCols / 2.0) * (this.game.global.thumbWidth + this.game.global.thumbSpacing),
 			this.game.world.centerY - ((this.game.global.thumbRows + 1) / 2.0) * (this.game.global.thumbHeight + this.game.global.thumbSpacing), 'menu', this.mainMenu, this);
 
+		var style = { font: "30px Ubuntu", fill: "#FFFFFF", align: "center"};
+		var title = this.game.add.text(this.game.world.centerX, this.game.world.centerY - ((this.game.global.thumbRows + 1) / 2.0) * (this.game.global.thumbHeight + this.game.global.thumbSpacing),
+		 'Level Select', style);
+		title.anchor.set(0.5,0);
+
   		// how many pages are needed to show all levels
   		var levelsPerPage = this.game.global.thumbRows * this.game.global.thumbCols;
   		pages = this.game.global.numLevels / levelsPerPage;
@@ -86,10 +91,10 @@ TileGame.LevelSelect.prototype = {
 					// if the level is playable, also write level number
 					if(this.game.global.lockedArray[levelNumber]<4){
 						var style = {
-							font: "18px Arial",
+							font: "20px Ubuntu",
 							fill: "#000000"
 						};
-						var levelText = this.game.add.text(levelThumb.x+10,levelThumb.y+10,levelNumber+1,style);
+						var levelText = this.game.add.text(levelThumb.x+11,levelThumb.y+8,levelNumber+1,style);
 						//levelText.setShadow(2, 2, 'rgba(0,0,0,0.5)', 1);
 						levelThumbsGroup.add(levelText);
 					}
@@ -171,6 +176,7 @@ TileGame.LevelSelect.prototype = {
 	},
 
     mainMenu: function () {
+    	this.state.states['MainMenu'].menu = 'Main';
         this.state.start('MainMenu');
     },
 } 

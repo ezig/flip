@@ -3,6 +3,7 @@ TileGame.Game = function(){};
 var levelType
 var level = [];
 var levelNum;
+var levelTitle;
 var field = [];
 var size;
 
@@ -16,6 +17,7 @@ TileGame.Game.prototype = {
         {
             level = data[levelNum - 1].level;
             size = data[levelNum - 1].size;
+            levelTile = data[levelNum - 1].name;
         } else {
             var sizes = [];
             sizes["Easy"] = 3;
@@ -34,10 +36,25 @@ TileGame.Game.prototype = {
         var menu = this.game.add.button(this.game.world.centerX - (size/2.0 * 100),
             this.game.world.centerY - (size/2.0 * 100) - 60, 'menu', this.mainMenu, this);
 
+        var audio = this.game.add.button(this.game.world.centerX - (size/2.0 * 100) + 50,
+            this.game.world.centerY - (size/2.0 * 100) - 60, 'audio', this.audio, this);
+        audio.frame = 0;
+
+        if (Phaser.SoundManager.muted)
+        {
+            audio.frame = 1;
+        }
+
         if (levelType != "Adventure")
         {
-            var restart = this.game.add.button(this.game.world.centerX - (size/2.0 * 100) + (size - 1) * 100,
+            var newLevel = this.game.add.button(this.game.world.centerX - (size/2.0 * 100) + (size - 1) * 100,
                 this.game.world.centerY - (size/2.0 * 100) - 60, 'new', this.newLevel, this);
+        } else 
+        {
+            var style = { font: "30px Ubuntu", fill: "#FFFFFF", align: "center"};
+            var title = this.game.add.text(this.game.world.centerX, this.game.world.centerY - (size/2.0 * 100) - 60,
+             levelTile, style);
+            title.anchor.set(0.45, -0.25);
         }
 
         var restart = this.game.add.button(this.game.world.centerX - (size/2.0 * 100) + size * 100 - 50,
@@ -74,8 +91,14 @@ TileGame.Game.prototype = {
             this.state.start('LevelSelect');
         } 
         else  {
+            this.state.states['MainMenu'].menu = 'Classic';
             this.state.start('MainMenu');
         }
+    },
+
+    audio: function (button) {
+        Phaser.SoundManager.muted = !Phaser.SoundManager.muted;
+        button.frame = (button.frame + 1) % 2;
     },
 
     newLevel: function() {
@@ -165,7 +188,9 @@ TileGame.Game.prototype = {
     },
 
     onDown: function (tile, pointer) {
-        this.flipSound.play();
+        if (!Phaser.SoundManager.muted) {
+            this.flipSound.play();
+        }
 
         this.pickTile(tile.row, tile.col);
 
@@ -221,6 +246,9 @@ TileGame.Game.prototype = {
         emitter.gravity = 100;
         emitter.start(true, 1500, null, 300);
         this.game.time.events.add(1500, this.win, this);
-        this.wonSound.play();
+
+        if (!Phaser.SoundManager.muted) {
+            this.wonSound.play();
+        }
     },
 };
