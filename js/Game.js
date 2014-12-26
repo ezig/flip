@@ -99,6 +99,8 @@ TileGame.Game.prototype = {
     audio: function (button) {
         Phaser.SoundManager.muted = !Phaser.SoundManager.muted;
         button.frame = (button.frame + 1) % 2;
+
+        localStorage['muted'] = JSON.stringify(Phaser.SoundManager.muted);
     },
 
     newLevel: function() {

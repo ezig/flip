@@ -16,16 +16,21 @@ TileGame.game.global = {
 	// 0 = playable yet unfinished level
 	// 1, 2, 3 = level finished with 1, 2, 3 stars
 	// 4 = locked
-	numLevels : 48,
+	numLevels : 32,
 
-	lockedArray : [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+	lockedArray : [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 	// level currently playing
 	level : 0
 }
 
-if (typeof localStorage["levels"] != 'undefined')
+if (typeof localStorage['levels'] != 'undefined')
 {
-	TileGame.game.global.lockedArray = JSON.parse(localStorage["levels"]);
+	TileGame.game.global.lockedArray = JSON.parse(localStorage['levels']);
+}
+
+if (typeof localStorage['muted'] != 'undefined')
+{
+	Phaser.SoundManager.muted = JSON.parse(localStorage['muted']);
 }
 
 TileGame.game.state.add('Boot', TileGame.Boot);

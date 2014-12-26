@@ -4,7 +4,7 @@ TileGame.LevelSelect = function(){};
 var pages;
 
 // keeps track of sprites that need to move
-var levelThumbsGroup;
+var tweenGroup;
 
 var currentPage;
 
@@ -51,58 +51,60 @@ TileGame.LevelSelect.prototype = {
 		if(currentPage == pages - 1) {
 			rightArrow.alpha = 0.3;
 		}
-		// creation of the thumbails group
-		levelThumbsGroup = this.game.add.group();
+
+		// group to keep track of everything that needs to move
+		// (level buttons and text)
+		tweenGroup = this.game.add.group();
+
 		// determining level thumbnails width and height for each page
-		var levelLength = this.game.global.thumbWidth*this.game.global.thumbCols+
-			this.game.global.thumbSpacing*(this.game.global.thumbCols-1);
-		var levelHeight = this.game.global.thumbWidth*this.game.global.thumbRows+this.game.global.thumbSpacing*(this.game.global.thumbRows-1);
-		// looping through each page
-		for(var l = 0; l < pages; l++){
-			// horizontal offset to have level thumbnails horizontally centered in the page
-			var offsetX = (this.game.width-levelLength)/2+this.game.width*l;
-			// I am not interested in having level thumbnails vertically centered in the page, but
-			// if you are, simple replace my "20" with
-			// (game.height-levelHeight)/2
+		var levelLength = this.game.global.thumbWidth * this.game.global.thumbCols + this.game.global.thumbSpacing * (this.game.global.thumbCols - 1);
+		var levelHeight = this.game.global.thumbWidth * this.game.global.thumbRows + this.game.global.thumbSpacing * (this.game.global.thumbRows - 1);
+		
+		for(var p = 0; p < pages; p++){
+			// offsets to have level thumbnails  centered in the page
+			var offsetX = (this.game.width - levelLength) / 2 + this.game.width * p;
 			var offsetY = (this.game.height - levelHeight)/2;
+
 			// looping through each level thumbnails
-		     for(var i = 0; i < this.game.global.thumbRows; i ++){
-		     	for(var j = 0; j < this.game.global.thumbCols; j ++){  
-		     		// which level does the thumbnail refer?
-					var levelNumber = i*this.game.global.thumbCols+j+l*(this.game.global.thumbRows*this.game.global.thumbCols);
-					// adding the thumbnail, as a button which will call thumbClicked function if clicked   		
-					var levelThumb = this.game.add.button(offsetX+j*(this.game.global.thumbWidth+this.game.global.thumbSpacing), offsetY+i*(this.game.global.thumbHeight+this.game.global.thumbSpacing), "levels", this.thumbClicked, this);	
-					// shwoing proper frame
+		     for(var i = 0; i < this.game.global.thumbRows; i++){
+		     	for(var j = 0; j < this.game.global.thumbCols; j++){  
+
+					var levelNumber = i * this.game.global.thumbCols + j + p * (this.game.global.thumbRows*this.game.global.thumbCols);
+					
+					// add the thumbnail button		
+					var levelThumb = this.game.add.button(offsetX + j * (this.game.global.thumbWidth+this.game.global.thumbSpacing),
+					 offsetY + i * (this.game.global.thumbHeight + this.game.global.thumbSpacing), "levels", this.thumbClicked, this);
+
+					// set tint based on whether level is locked, unlocked or beaten
 					if (this.game.global.lockedArray[levelNumber] == 0) {
+						// locked
 						levelThumb.tint = "0x999999";
 						levelThumb.isLocked = true;
 					}
 					else {
 						if (this.game.global.lockedArray[levelNumber] == 2) {
+							//beaten
 							levelThumb.tint = "0xFFC125";
 						}
 						levelThumb.isLocked = false;
 					}
+
 					levelThumb.clicked = false;
-					// custom attribute 
-					levelThumb.levelNumber = levelNumber+1;
-					// adding the level thumb to the group
-					levelThumbsGroup.add(levelThumb);
-					// if the level is playable, also write level number
-					if(this.game.global.lockedArray[levelNumber]<4){
-						var style = {
-							font: "20px Ubuntu",
-							fill: "#000000"
-						};
-						var levelText = this.game.add.text(levelThumb.x+11,levelThumb.y+8,levelNumber+1,style);
-						//levelText.setShadow(2, 2, 'rgba(0,0,0,0.5)', 1);
-						levelThumbsGroup.add(levelText);
+					levelThumb.levelNumber = levelNumber + 1;
+
+					tweenGroup.add(levelThumb);
+					
+					// write level number
+					var style = {font: "20px Ubuntu", fill: "#000000"};
+					var levelText = this.game.add.text(levelThumb.x + 11,levelThumb.y + 8,levelNumber + 1,style);
+					
+					tweenGroup.add(levelText);
 					}
 				}
 			}
-		}
-		// scrolling thumbnails group according to level position
-		levelThumbsGroup.x = currentPage * this.game.width * -1
+
+		// scroll icons according to page
+		tweenGroup.x = -currentPage * this.game.width;
 	},
 
 	leftArrowClicked:function(button){
@@ -115,10 +117,10 @@ TileGame.LevelSelect.prototype = {
 				button.alpha = 0.3;
 			}
 			// scrolling level pages
-			var buttonsTween = this.game.add.tween(levelThumbsGroup);
+			var buttonsTween = this.game.add.tween(tweenGroup);
 			buttonsTween.to({
 				x: currentPage * this.game.width * -1
-			}, 1000, Phaser.Easing.Cubic.Out);
+			}, 1250, Phaser.Easing.Cubic.Out);
 			buttonsTween.start();
 		}		
 	},
@@ -133,10 +135,10 @@ TileGame.LevelSelect.prototype = {
 				button.alpha = 0.3;
 			}
 			// scrolling level pages
-			var buttonsTween = this.game.add.tween(levelThumbsGroup);
+			var buttonsTween = this.game.add.tween(tweenGroup);
 			buttonsTween.to({
 				x: currentPage * this.game.width * -1
-			}, 1000, Phaser.Easing.Cubic.out);
+			}, 1250, Phaser.Easing.Cubic.Out);
 			buttonsTween.start();
 		}
 	},

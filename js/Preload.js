@@ -16,7 +16,6 @@ TileGame.Preload.prototype = {
 		this.load.image('restart', 'assets/images/restart.png');
 		this.load.image('rightArrow', 'assets/images/arrowRight.png');
 		this.load.image('leftArrow', 'assets/images/arrowLeft.png');
-		this.load.image('locked', 'assets/images/locked.png');
 		this.load.image('levels', 'assets/images/levels.png');
 		this.load.image('help', 'assets/images/help.png');
 		this.load.image('new', 'assets/images/new.png');
