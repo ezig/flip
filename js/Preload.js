@@ -25,20 +25,8 @@ TileGame.Preload.prototype = {
 	},
 	
 	create: function() {
-		//	Once the load has finished we disable the crop as the music decodes
-		//this.preloadBar.cropEnabled = false;
 		this.ready = true;
 		this.state.states['MainMenu'].menu = 'Main';
 		this.state.start('MainMenu');
 	},
-
-	update: function() {
-		//waits for audio to finish decoding for smoother experience
-
-		// if (this.cache.isSoundDecoded('collect') && this.ready == false)
-		// {
-		// 	this.ready = true;
-		// 	this.state.start('MainMenu');
-		// }
-	}
 };

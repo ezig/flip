@@ -147,7 +147,6 @@ TileGame.LevelSelect.prototype = {
 		// the level is playable
 		if(!button.isLocked){
 			this.game.state.states['Game'].levelNum = button.levelNumber;
-			this.game.global.level = button.levelNumber;
 			this.game.state.start('Game');
 		}
 		// otherwise shake the icon to show it is locked
