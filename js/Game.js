@@ -73,9 +73,12 @@ TileGame.Game.prototype = {
             title.anchor.set(0.45, -0.25);
         }
 
+        // add a button to restart the level to intial state
+        // (in case the player makes mistakes)
         var restart = this.game.add.button(this.game.world.centerX - (size/2.0 * 100) + size * 100 - 50,
             this.game.world.centerY - (size/2.0 * 100) - 60, 'restart', this.restart, this);
 
+        // initialize the field to an empty array
         for (var i = 0; i < size; i++) {
             field[i] = [];
         }
@@ -88,12 +91,15 @@ TileGame.Game.prototype = {
         }
     },
 
+    // redraw the field using the initial level
     restart: function () {
         this.drawField();
     },
 
+    // return to the last menu visited
     mainMenu: function () {
         if (levelType == 'Adventure') {
+            // go back to level select screen
             // prevent scrolling over to the next page
             // if you quit the last level on a pageinstead of beating it
             this.state.states['Game'].levelNum--;
@@ -101,18 +107,24 @@ TileGame.Game.prototype = {
             this.state.start('LevelSelect');
         } 
         else  {
+            // go back to second page of main menu
             this.state.states['MainMenu'].menu = 'Classic';
             this.state.start('MainMenu');
         }
     },
 
+    // toggle audio on and off
     audio: function (button) {
+        // toggle mute
         Phaser.SoundManager.muted = !Phaser.SoundManager.muted;
+        // toggle the fram of the audio button
         button.frame = (button.frame + 1) % 2;
 
+        // store preference locally
         localStorage['muted'] = JSON.stringify(Phaser.SoundManager.muted);
     },
 
+    // generate a new level and draw it
     newLevel: function() {
         this.generateLevel();
     },
@@ -143,16 +155,22 @@ TileGame.Game.prototype = {
 
     },
 
+    // if playing classic mode, make a size x size square level
+    // this is done by creating a level of all whtie tiles
+    // and then clicking on a few tiles the same way that a player would
+    // this ensures that the level is solvable by the player!
     generateLevel: function () {
+        // initialize a level of all white tiles (0's)
         for (var i = 0; i < size; i++) {
             level[i] = [];
-
             for (var j = 0; j < size; j++) {
                 level[i][j] = [0];
             }
         }
         this.drawField();
 
+        // until we get a level that isn't all white, 
+        // flip over size tiles (and the adjacent tiles) randomly 
         while (this.checkWin())
         {
             for (var i = 0; i < size; i++) {
@@ -160,6 +178,9 @@ TileGame.Game.prototype = {
             }
         }
 
+        // update the level data to match the new field
+        // this is only ever used to reset the level to the start
+        // so that we have a record of the above random flips
         for (var i = 0; i < size; i++) {
             for (var j = 0; j < size; j++) {
                 level[i][j] = field[i][j].val;
@@ -168,23 +189,34 @@ TileGame.Game.prototype = {
 
     },
 
+    // takes the level data in level and builds the tiles
+    // currently, 0 represents a white tile, 1 represents a red tile,
+    // and "" represents no tile (used to make non-rectangular grids)
     drawField: function () {
         for (var i = 0; i < size; i++) {
             for (var j = 0; j < size; j++) {
+                // if there is a tile at the i, j position
                 if (level[j][i] !== "") {
                     var tile = this.game.add.sprite(this.game.world.centerX - (size/2.0 * 100) + i * 100,
                      this.game.world.centerY - (size/2.0) * 100 + j * 100,'tile');
-
+                    
                     tile.val = level[j][i];
+                    
+                    // make sure the tile is the right color
                     this.changeTint(tile);
-
+                    
                     tile.row = j;
                     tile.col = i;
                     tile.isTile = true;
                     tile.inputEnabled = true;
+
+                    // add click listener
                     tile.events.onInputDown.add(this.onDown, this);
+
                     field[j][i] = tile;
                 } else {
+                    //no tile
+
                     var tile = {
                         val: 0,
                         isTile: false 
