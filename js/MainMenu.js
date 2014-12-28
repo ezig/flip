@@ -10,7 +10,7 @@ TileGame.MainMenu.prototype = {
 		// title text
 		var style = { font: "30px Ubuntu", fill: "#FFFFFF", align: "center"};
 		var quarterY = this.game.height/4.0;
-		var title = this.game.add.text(this.game.world.centerX, quarterY, 'Flip', style);
+		var title = this.game.add.text(this.game.world.centerX, this.game.world.centerY - 160, 'Flip', style);
 		title.anchor.set(0.5, 0.5);
 
 		// set a rotating animation for the title on repeat
@@ -36,13 +36,14 @@ TileGame.MainMenu.prototype = {
 
 		for (var i = 1; i <= 3; i++)
 		{
-			var button = this.game.add.button(this.game.world.centerX, quarterY + 80 * i, 'button', this.onClick, this);
+			var button = this.game.add.button(this.game.world.centerX, this.game.world.centerY + 80 * (i - 2), 'button', this.onClick, this);
 			button.anchor.set(0.5, 0.5);
+			button.events.onInputUp.add(this.onUp, this);
 			button.events.onInputOver.add(this.onOver, this);
 			button.events.onInputOut.add(this.onOut, this);
 			button.title = texts[i - 1];
 
-			var t = this.game.add.text(this.game.world.centerX, quarterY + 80 * i, texts[i - 1], style);
+			var t = this.game.add.text(this.game.world.centerX, this.game.world.centerY + 80 * (i - 2), texts[i - 1], style);
 			t.anchor.set(0.5, 0.5);
 
 			buttonGroup.add(button);
@@ -53,13 +54,14 @@ TileGame.MainMenu.prototype = {
 		var texts = ['Easy', 'Medium', 'Hard', 'Back']
 		for (var i = 1; i <= 4; i++)
 		{
-			var button = this.game.add.button(this.game.world.centerX + this.game.world.width, quarterY + 80 * i, 'button', this.onClick, this);
+			var button = this.game.add.button(this.game.world.centerX + this.game.world.width, this.game.world.centerY + 80 * (i - 2), 'button', this.onClick, this);
 			button.anchor.set(0.5, 0.5);
+			button.events.onInputUp.add(this.onUp, this);
 			button.events.onInputOver.add(this.onOver, this);
 			button.events.onInputOut.add(this.onOut, this);
 			button.title = texts[i - 1];
 
-			var t = this.game.add.text(this.game.world.centerX + this.game.world.width, quarterY + 80 * i, texts[i - 1], style);
+			var t = this.game.add.text(this.game.world.centerX + this.game.world.width, this.game.world.centerY + 80 * (i - 2), texts[i - 1], style);
 			t.anchor.set(0.5, 0.5);
 
 			buttonGroup.add(button);
@@ -67,20 +69,21 @@ TileGame.MainMenu.prototype = {
 		}
 
 		// create the help screen
-		var helpText = this.game.add.text(this.game.world.centerX - this.game.world.width, quarterY + 75,
+		var helpText = this.game.add.text(this.game.world.centerX - this.game.world.width, this.game.world.centerY - 100,
 		 'Flip all of the tiles from red to white.\n Flipping a tile flips all adjacent tiles.', style);
 		helpText.anchor.set(0.5,0.5);
 
-		var help = this.game.add.sprite(this.game.world.centerX - this.game.world.width, quarterY + 100, 'help');
+		var help = this.game.add.sprite(this.game.world.centerX - this.game.world.width, this.game.world.centerY - 50, 'help');
 		help.anchor.set(0.5,0)
 
-		var button = this.game.add.button(this.game.world.centerX - this.game.world.width, quarterY + 320, 'button', this.onClick, this);
+		var button = this.game.add.button(this.game.world.centerX - this.game.world.width, this.game.world.centerY + 175, 'button', this.onClick, this);
 		button.anchor.set(0.5, 0.5);
+		button.events.onInputUp.add(this.onUp, this);
 		button.events.onInputOver.add(this.onOver, this);
 		button.events.onInputOut.add(this.onOut, this);
 		button.title = 'OK!';
 
-		var t = this.game.add.text(this.game.world.centerX - this.game.world.width, quarterY + 320, 'OK!', style);
+		var t = this.game.add.text(this.game.world.centerX - this.game.world.width, this.game.world.centerY + 175, 'OK!', style);
 		t.anchor.set(0.5, 0.5);
 
 		buttonGroup.add(helpText);
@@ -93,6 +96,12 @@ TileGame.MainMenu.prototype = {
 		if (this.menu == 'Classic')
 		{
 			buttonGroup.x -= this.game.width
+		}
+
+		if (!this.game.device.desktop)
+		{
+			console.log("hi");
+			buttonGroup.tint = 0xFF0000;
 		}
 	},
 
@@ -134,6 +143,11 @@ TileGame.MainMenu.prototype = {
 			this.game.state.states['Game'].levelType = button.title;
 			this.game.state.start('Game');
 		}
+	},
+
+	// tint button white on release
+	onUp: function(button) {
+		button.tint = 0xFFFFFF;
 	},
 
 	// tint button red when mouse is over button
