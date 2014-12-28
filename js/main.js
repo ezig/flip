@@ -3,6 +3,8 @@ var TileGame = TileGame || {};
 
 TileGame.game = new Phaser.Game(window.innerWidth, window.innerHeight, Phaser.AUTO, '');
 
+console.log(window.innerWidth, window.innerHeight);
+
 TileGame.game.global = {
 	// number of rows, columns for level select
 	thumbRows : 4,
@@ -30,8 +32,7 @@ if (typeof localStorage['levels'] != 'undefined')
 }
 
 // if a local mute setting exists, use it
-if (typeof localStorage['muted'] != 'undefined')
-{
+if (typeof localStorage['muted'] != 'undefined') {
 	Phaser.SoundManager.muted = JSON.parse(localStorage['muted']);
 }
 
