@@ -1,7 +1,7 @@
 var TileGame = TileGame || {};
 
-var w = window.innerWidth * window.devicePixelRatio,
-    h = window.innerHeight * window.devicePixelRatio;
+var w = window.innerWidth
+    h = window.innerHeight
 
 // simply pass them in
 
