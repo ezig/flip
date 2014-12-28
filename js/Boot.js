@@ -32,6 +32,7 @@ TileGame.Boot.prototype = {
             this.scale.pageAlignVertically = true;
             this.scale.pageAlignHorizontally = true;
             this.game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+            cale.setScreenSize(true)
             // this.scale.setMinMax(640, 360, 1280, 720);
             // this.game.scale.setScreenSize();
             this.game.scale.refresh();
