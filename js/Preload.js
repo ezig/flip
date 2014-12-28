@@ -28,5 +28,7 @@ TileGame.Preload.prototype = {
 		this.ready = true;
 		this.state.states['MainMenu'].menu = 'Main';
 		this.state.start('MainMenu');
+        
+        
 	},
 };

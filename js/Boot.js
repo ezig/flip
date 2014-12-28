@@ -40,6 +40,6 @@ TileGame.Boot.prototype = {
             this.scale.pageAlignHorizontally = true;
         }
 
-		this.state.start('Preload');
-	}
+        this.state.start('Preload');
+    }
 };
