@@ -1,11 +1,7 @@
 var TileGame = TileGame || {};
-
-var w = window.innerWidth
-    h = window.innerHeight
-
 // simply pass them in
 
-TileGame.game = new Phaser.Game(1280, 720, Phaser.AUTO, '');
+TileGame.game = new Phaser.Game(window.innerWidth, window.innerHeight, Phaser.AUTO, '');
 
 TileGame.game.global = {
 	// number of rows, columns for level select
