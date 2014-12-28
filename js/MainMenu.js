@@ -97,12 +97,6 @@ TileGame.MainMenu.prototype = {
 		{
 			buttonGroup.x -= this.game.width
 		}
-
-		if (!this.game.device.desktop)
-		{
-			console.log("hi");
-			buttonGroup.tint = 0xFF0000;
-		}
 	},
 
 	// respond to button click

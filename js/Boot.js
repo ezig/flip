@@ -21,12 +21,17 @@ TileGame.Boot.prototype = {
         if (this.game.device.desktop)
         {
             //  desktop specific settings go in here
+            this.scale.pageAlignVertically = true;
             this.scale.pageAlignHorizontally = true;
+            this.game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+            this.game.scale.setScreenSize();
+            this.game.scale.refresh();
         }
         else
         {
+            this.scale.pageAlignVertically = true;
             this.scale.pageAlignHorizontally = true;
-            this.game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+            this.game.scale.scaleMode = Phaser.ScaleManager.EXACT_FIT;
             this.game.scale.setScreenSize();
             this.game.scale.refresh();
             //  Same goes for mobile settings.
