@@ -1,7 +1,7 @@
 var TileGame = TileGame || {};
 // simply pass them in
 
-TileGame.game = new Phaser.Game(window.innerWidth, window.innerHeight, Phaser.AUTO, '');
+TileGame.game = new Phaser.Game(640, 1136, Phaser.AUTO, '');
 
 console.log(window.innerWidth, window.innerHeight);
 
