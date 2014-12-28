@@ -150,6 +150,7 @@ TileGame.Game.prototype = {
         }
         // if we're in classic mode, go back to the main menu
         else {
+            this.state.states['MainMenu'].menu = 'Classic';
             this.state.start('MainMenu');
         }
 
