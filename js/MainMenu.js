@@ -8,8 +8,8 @@ TileGame.MainMenu.prototype = {
 		buttonGroup = this.game.add.group();
 
 		// title text
-		var style = { font: "60px Ubuntu", fill: "#FFFFFF", align: "center"};
-		var title = this.game.add.text(this.game.world.centerX, this.game.height/6.0, 'Flip', style);
+		var style = { font: "50px Ubuntu", fill: "#FFFFFF", align: "center"};
+		var title = this.game.add.text(this.game.world.centerX, this.game.height/7.0, 'Flip', style);
 		title.anchor.set(0.5, 0.5);
 
 		// set a rotating animation for the title on repeat
