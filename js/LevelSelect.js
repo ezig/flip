@@ -35,7 +35,8 @@ TileGame.LevelSelect.prototype = {
 		}
 		// left page arrow
 		leftArrow = this.game.add.button(this.game.world.centerX - (this.game.global.thumbCols / 2.0) * (this.game.global.thumbWidth + this.game.global.thumbSpacing),
-			this.game.world.centerY + (this.game.global.thumbRows / 2.0) * (this.game.global.thumbHeight + this.game.global.thumbSpacing),"leftArrow",this.leftArrowClicked,this);
+			this.game.world.centerY + (this.game.global.thumbRows / 2.0) * (this.game.global.thumbHeight + this.game.global.thumbSpacing) + 25,"leftArrow",this.leftArrowClicked,this);
+		leftArrow.scale.setTo(1.5);
 
 		// grey out the left arrow if on the first page
 		if(currentPage == 0) {
@@ -44,8 +45,10 @@ TileGame.LevelSelect.prototype = {
 
 		// arrow button, to turn one page right
 		rightArrow = this.game.add.button(this.game.world.centerX + (this.game.global.thumbCols / 2.0) * (this.game.global.thumbWidth + this.game.global.thumbSpacing),
-			this.game.world.centerY + (this.game.global.thumbRows / 2.0) * (this.game.global.thumbHeight + this.game.global.thumbSpacing),"rightArrow",this.rightArrowClicked,this);
-		rightArrow.anchor.setTo(1, 0);
+			this.game.world.centerY + (this.game.global.thumbRows / 2.0) * (this.game.global.thumbHeight + this.game.global.thumbSpacing) + 25,"rightArrow",this.rightArrowClicked,this);
+		rightArrow.anchor.setTo(1,0);
+
+		rightArrow.scale.setTo(1.5);
 
 		// grey out right arrow if on the last page
 		if(currentPage == pages - 1) {

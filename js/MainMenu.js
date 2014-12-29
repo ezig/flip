@@ -8,9 +8,8 @@ TileGame.MainMenu.prototype = {
 		buttonGroup = this.game.add.group();
 
 		// title text
-		var style = { font: "30px Ubuntu", fill: "#FFFFFF", align: "center"};
-		var quarterY = this.game.height/4.0;
-		var title = this.game.add.text(this.game.world.centerX, this.game.world.centerY - 160, 'Flip', style);
+		var style = { font: "60px Ubuntu", fill: "#FFFFFF", align: "center"};
+		var title = this.game.add.text(this.game.world.centerX, this.game.height/6.0, 'Flip', style);
 		title.anchor.set(0.5, 0.5);
 
 		// set a rotating animation for the title on repeat
@@ -32,18 +31,19 @@ TileGame.MainMenu.prototype = {
 
 		// create the "center" menu
 		var texts = ['Classic', 'Adventure', 'Help'];
-		var style = { font: "20px Ubuntu", fill: "#000000", align: "center"};
+		var style = { font: "30px Ubuntu", fill: "#000000", align: "center"};
 
 		for (var i = 1; i <= 3; i++)
 		{
-			var button = this.game.add.button(this.game.world.centerX, this.game.world.centerY + 80 * (i - 2), 'button', this.onClick, this);
+			var button = this.game.add.button(this.game.world.centerX, this.game.world.centerY + 100 * (i - 2), 'button', this.onClick, this);
 			button.anchor.set(0.5, 0.5);
 			button.events.onInputUp.add(this.onUp, this);
 			button.events.onInputOver.add(this.onOver, this);
 			button.events.onInputOut.add(this.onOut, this);
 			button.title = texts[i - 1];
+			button.scale.setTo(1.5);
 
-			var t = this.game.add.text(this.game.world.centerX, this.game.world.centerY + 80 * (i - 2), texts[i - 1], style);
+			var t = this.game.add.text(this.game.world.centerX, this.game.world.centerY + 100 * (i - 2), texts[i - 1], style);
 			t.anchor.set(0.5, 0.5);
 
 			buttonGroup.add(button);
@@ -54,14 +54,15 @@ TileGame.MainMenu.prototype = {
 		var texts = ['Easy', 'Medium', 'Hard', 'Back']
 		for (var i = 1; i <= 4; i++)
 		{
-			var button = this.game.add.button(this.game.world.centerX + this.game.world.width, this.game.world.centerY + 80 * (i - 2), 'button', this.onClick, this);
+			var button = this.game.add.button(this.game.world.centerX + this.game.world.width, this.game.world.centerY + 100 * (i - 2), 'button', this.onClick, this);
 			button.anchor.set(0.5, 0.5);
 			button.events.onInputUp.add(this.onUp, this);
 			button.events.onInputOver.add(this.onOver, this);
 			button.events.onInputOut.add(this.onOut, this);
 			button.title = texts[i - 1];
+			button.scale.setTo(1.5);
 
-			var t = this.game.add.text(this.game.world.centerX + this.game.world.width, this.game.world.centerY + 80 * (i - 2), texts[i - 1], style);
+			var t = this.game.add.text(this.game.world.centerX + this.game.world.width, this.game.world.centerY + 100 * (i - 2), texts[i - 1], style);
 			t.anchor.set(0.5, 0.5);
 
 			buttonGroup.add(button);
@@ -76,14 +77,16 @@ TileGame.MainMenu.prototype = {
 		var help = this.game.add.sprite(this.game.world.centerX - this.game.world.width, this.game.world.centerY - 50, 'help');
 		help.anchor.set(0.5,0)
 
-		var button = this.game.add.button(this.game.world.centerX - this.game.world.width, this.game.world.centerY + 175, 'button', this.onClick, this);
+		var button = this.game.add.button(this.game.world.centerX - this.game.world.width, this.game.world.centerY + 200, 'button', this.onClick, this);
 		button.anchor.set(0.5, 0.5);
 		button.events.onInputUp.add(this.onUp, this);
 		button.events.onInputOver.add(this.onOver, this);
 		button.events.onInputOut.add(this.onOut, this);
 		button.title = 'OK!';
 
-		var t = this.game.add.text(this.game.world.centerX - this.game.world.width, this.game.world.centerY + 175, 'OK!', style);
+		button.scale.setTo(1.5);
+
+		var t = this.game.add.text(this.game.world.centerX - this.game.world.width, this.game.world.centerY + 200, 'OK!', style);
 		t.anchor.set(0.5, 0.5);
 
 		buttonGroup.add(helpText);
